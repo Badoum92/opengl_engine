@@ -2,32 +2,25 @@
 
 #include <glad/glad.h>
 #include <iostream>
-#include <cstdlib>
 
 #include "stb_image.hh"
 
-std::unordered_map<std::string, std::shared_ptr<Texture>> Texture::textures;
+std::unordered_map<std::string, std::shared_ptr<Texture>> Texture::textures_;
 
-Texture::Texture(const std::string& path)
-{
-    load(path);
-    name = path;
-}
+Texture::Texture(const std::string& path, aiTextureType type)
+    : type_(type)
+    , id_(from_file(path))
+    , path_(path)
+{}
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &id);
+    glDeleteTextures(1, &id_);
 }
 
-void Texture::update(const std::string& path)
+unsigned Texture::from_file(const std::string& path)
 {
-    glDeleteTextures(1, &id);
-    id = 0;
-    load(path);
-}
-
-void Texture::load(const std::string& path)
-{
+    unsigned id = 0;
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -38,29 +31,41 @@ void Texture::load(const std::string& path)
     unsigned char* data = stbi_load(path.c_str(), &w, &h, &nb_chans, 0);
     if (data == nullptr)
     {
-        std::cerr << "Could not load texture: " + path;
+        std::cerr << "Texture: Could not load file: " + path;
         exit(1);
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0,
                  nb_chans == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(data);
+    return id;
 }
 
 void Texture::bind() const
 {
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, id);
+    glBindTexture(GL_TEXTURE_2D, id_);
 }
 
-std::shared_ptr<Texture> Texture::get_texture(const std::string& path)
+aiTextureType Texture::get_type() const
 {
-    if (textures.find(path) != textures.end())
+    return type_;
+}
+
+std::shared_ptr<Texture> Texture::get(const std::string& path,
+                                      aiTextureType type)
+{
+    auto it = textures_.find(path);
+    if (it != textures_.end() && it->second->type_ == type)
     {
-        return textures[path];
+        return it->second;
     }
-    auto texture = std::make_shared<Texture>(path);
-    textures[path] = texture;
-    return texture;
+    auto tex = std::make_shared<Texture>(path, type);
+    textures_[path] = tex;
+    return tex;
+}
+
+void Texture::active(unsigned i)
+{
+    glActiveTexture(GL_TEXTURE0 + i);
 }

@@ -1,14 +1,9 @@
 #include "gl_buffers/vertex_array.hh"
 
-VertexArray::VertexArray()
+VertexArray::VertexArray(const VertexBuffer& vb,
+                         const VertexBufferLayout& layout, unsigned location)
 {
     glGenVertexArrays(1, &id);
-}
-
-void VertexArray::add_buffer(const VertexBuffer& vb,
-                             const VertexBufferLayout& layout,
-                             unsigned location) const
-{
     vb.bind();
     bind();
     unsigned offset = 0;

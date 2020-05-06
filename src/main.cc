@@ -16,13 +16,15 @@
 
 #include "imgui_windows.hh"
 
+#include "model.hh"
+
 void program_init(GLFWwindow* window)
 {
     Camera::init(glm::vec3(0.0f, 0.0f, 0.0f));
     ImGuiWindows::init(window);
 }
 
-int main()
+int main(int argc, char** argv)
 {
     Window::instance();
     GLFWwindow* window = Window::glfw_window();
@@ -39,28 +41,12 @@ int main()
         .add("../shaders/shader.frag", Shader::Type::FRAGMENT)
         .link();
 
-    // clang-format off
-    float vertices[] = {
-         0.0f,  0.0f,  1.0f,
-        -1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
-    };
-
-    unsigned indices[] = {
-        0, 1, 2,
-        1, 2, 3,
-        0, 1, 3,
-        0, 2, 3
-    };
-    // clang-format on
-
-    VertexBuffer vb{vertices, sizeof(vertices)};
-    IndexBuffer ib{indices, sizeof(indices)};
-    VertexBufferLayout layout;
-    layout.push<float>(3);
-    VertexArray va;
-    va.add_buffer(vb, layout);
+    if (argc < 2)
+    {
+        std::cerr << "Expected model path\n";
+        return 1;
+    }
+    Model model{argv[1]};
 
     while (!glfwWindowShouldClose(window))
     {
@@ -70,13 +56,7 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader->bind();
-        shader->uniform("u_model", glm::mat4(1));
-        shader->uniform("u_view", Camera::get_view_matrix());
-        shader->uniform("u_projection", Camera::get_proj_matrix());
-        va.bind();
-        ib.bind();
-        glDrawElements(GL_TRIANGLES, ib.get_count(), GL_UNSIGNED_INT, 0);
+        model.draw(shader);
 
         ImGuiWindows::render();
 

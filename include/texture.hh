@@ -1,23 +1,30 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <unordered_map>
+#include <memory>
+#include <assimp/scene.h>
 
 class Texture
 {
 public:
-    Texture(const std::string& path);
+    Texture(const std::string& path, aiTextureType type);
     ~Texture();
-    void update(const std::string& path);
-    void load(const std::string& path);
+
     void bind() const;
 
-    static std::shared_ptr<Texture> get_texture(const std::string& path);
+    aiTextureType get_type() const;
+
+    static std::shared_ptr<Texture> get(const std::string& path,
+                                        aiTextureType type);
+    static void active(unsigned i);
 
 private:
-    unsigned id;
-    std::string name;
+    aiTextureType type_;
+    unsigned id_;
+    const std::string path_;
 
-    static std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+    static unsigned from_file(const std::string& path);
+
+    static std::unordered_map<std::string, std::shared_ptr<Texture>> textures_;
 };

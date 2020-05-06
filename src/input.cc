@@ -20,11 +20,6 @@ void process_input(GLFWwindow* window)
         Camera::process_keyboard(Camera::Movement::UP);
     if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
         Camera::process_keyboard(Camera::Movement::DOWN);
-
-    if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS)
-        Camera::add_speed(1.0f);
-    if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS)
-        Camera::add_speed(-1.0f);
 }
 
 void mouse_callback(GLFWwindow*, double x_pos, double y_pos)

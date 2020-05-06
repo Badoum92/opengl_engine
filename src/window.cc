@@ -44,8 +44,6 @@ GLFWwindow* create_window()
 
     glEnable(GL_DEPTH_TEST);
 
-    stbi_set_flip_vertically_on_load(true);
-
     glfwSwapInterval(0);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

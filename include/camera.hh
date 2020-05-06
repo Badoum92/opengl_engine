@@ -34,7 +34,8 @@ public:
                                        GLboolean constrain_pitch = true);
     static void process_mouse_scroll(float y_offset);
 
-    static void add_speed(float speed);
+    static float& get_speed();
+    static void set_speed(float speed);
 
 private:
     static glm::vec3 position_;

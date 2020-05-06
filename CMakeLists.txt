@@ -27,6 +27,7 @@ add_executable(main
     src/renderer.cc
     src/texture.cc
     src/mesh.cc
+    src/model.cc
 
     src/gl_buffers/vertex_buffer.cc
     src/gl_buffers/vertex_buffer_layout.cc
@@ -39,12 +40,13 @@ add_executable(main
 )
 
 include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${GLM_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${GLAD_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${ASSIMP_INCLUDE_DIR}
 )
 include_directories(include)
 
@@ -53,4 +55,5 @@ target_link_libraries(main
     ${GLFW_LIBRARIES}
     ${GLAD_LIBRARIES}
     ${IMGUI_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
 )

@@ -7,6 +7,7 @@
 
 #include "time.hh"
 #include "window.hh"
+#include "camera.hh"
 
 namespace ImGuiWindows
 {
@@ -33,7 +34,7 @@ namespace ImGuiWindows
         ImGui::Begin("Info");
 
         ImGui::SetWindowPos(ImVec2(0, 0));
-        ImGui::SetWindowSize(ImVec2(200, 100));
+        ImGui::SetWindowSize(ImVec2(200, 200));
         ImGui::Text("FPS: %u", Time::fps);
 
         ImGui::Checkbox("Wireframe", &wireframe_enabled);
@@ -41,6 +42,8 @@ namespace ImGuiWindows
         {
             Window::set_polygon_mode(wireframe_enabled ? GL_LINE : GL_FILL);
         }
+
+        ImGui::SliderFloat("Speed", &Camera::get_speed(), 0.0f, 500.0f);
 
         ImGui::End();
     }

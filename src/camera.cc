@@ -34,7 +34,7 @@ void Camera::init(const glm::vec3& position, glm::vec3 up, float yaw,
     update_vectors();
 
     float near = 0.1f;
-    float far = 200.0f;
+    float far = 3000.0f;
     projection_ = glm::perspective(glm::radians(zoom_),
                                    (float)WIDTH / (float)HEIGHT, near, far);
 }
@@ -71,9 +71,14 @@ glm::mat4 Camera::get_proj_matrix()
     return projection_;
 }
 
-void Camera::add_speed(float speed)
+float& Camera::get_speed()
 {
-    movement_speed_ += speed;
+    return movement_speed_;
+}
+
+void Camera::set_speed(float speed)
+{
+    movement_speed_ = speed;
 }
 
 void Camera::process_keyboard(Camera::Movement direction)
