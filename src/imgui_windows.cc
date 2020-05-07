@@ -11,6 +11,8 @@
 
 namespace ImGuiWindows
 {
+    glm::vec3 light_pos = glm::vec3(0);
+
     void init(GLFWwindow* window)
     {
         IMGUI_CHECKVERSION();
@@ -44,6 +46,10 @@ namespace ImGuiWindows
         }
 
         ImGui::SliderFloat("Speed", &Camera::get_speed(), 0.0f, 500.0f);
+
+        ImGui::SliderFloat("light x", &light_pos.x, -200, 200);
+        ImGui::SliderFloat("light y", &light_pos.y, -200, 200);
+        ImGui::SliderFloat("light z", &light_pos.z, -200, 200);
 
         ImGui::End();
     }

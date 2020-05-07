@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <unordered_set>
 #include <string>
 #include <memory>
 #include <assimp/scene.h>
@@ -27,12 +28,14 @@ private:
         glm::vec3 position;
         glm::vec3 normal;
         glm::vec2 tex_coords;
+        glm::vec3 tangent;
+        glm::vec3 bitangent;
     };
 
     const std::string& directory_;
     std::vector<Vertex> vertices_;
     std::vector<unsigned> indices_;
-    std::vector<std::shared_ptr<Texture>> textures_;
+    std::unordered_set<std::shared_ptr<Texture>> textures_;
 
     std::shared_ptr<VertexArray> va_;
     std::shared_ptr<VertexBuffer> vb_;

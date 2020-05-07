@@ -6,13 +6,15 @@
 
 #include "camera.hh"
 
+#include "imgui_windows.hh"
+
 Model::Model(const std::string& path)
 {
     Assimp::Importer import;
     const aiScene* scene = import.ReadFile(
         path,
         aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals
-            | aiProcess_JoinIdenticalVertices);
+            | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 
     if (!scene)
     {
@@ -32,6 +34,7 @@ void Model::draw(std::shared_ptr<Shader> shader) const
     shader->uniform("u_model", glm::mat4(1));
     shader->uniform("u_view", Camera::get_view_matrix());
     shader->uniform("u_projection", Camera::get_proj_matrix());
+    shader->uniform("u_light_pos", ImGuiWindows::light_pos);
 
     for (const auto& mesh : meshes_)
     {

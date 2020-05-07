@@ -1,5 +1,7 @@
 #include "mesh.hh"
 
+#include <iostream>
+
 Mesh::Mesh(aiMesh* mesh, const aiScene* scene, const std::string& directory)
     : directory_(directory)
 {
@@ -13,17 +15,24 @@ void Mesh::draw(std::shared_ptr<Shader> shader) const
 {
     unsigned diff_nb = 0;
     unsigned spec_nb = 0;
-    for (unsigned i = 0; i < textures_.size(); ++i)
+    unsigned normal_nb = 0;
+    unsigned i = 0;
+    for (const auto& tex : textures_)
     {
         Texture::active(i);
         std::string name = "";
-        aiTextureType type = textures_[i]->get_type();
+        aiTextureType type = tex->get_type();
         if (type == aiTextureType_DIFFUSE)
             name = "tex_diff" + std::to_string(diff_nb++);
         else if (type == aiTextureType_SPECULAR)
             name = "tex_spec" + std::to_string(spec_nb++);
+        else if (type == aiTextureType_NORMALS)
+            name = "tex_normal" + std::to_string(normal_nb++);
+        else if (type == aiTextureType_HEIGHT)
+            name = "tex_normal" + std::to_string(normal_nb++);
         shader->uniform(name.c_str(), (int)i);
-        textures_[i]->bind();
+        tex->bind();
+        i++;
     }
     Texture::active(0);
 
@@ -38,8 +47,11 @@ void Mesh::setup_buffers()
     layout.push<float>(3); // position
     layout.push<float>(3); // normal
     layout.push<float>(2); // tex_coords
+    layout.push<float>(3); // tangent
+    layout.push<float>(3); // bitangent
     vb_ = std::make_shared<VertexBuffer>((float*)vertices_.data(),
-                                         vertices_.size() * 8);
+                                         vertices_.size() * sizeof(Vertex)
+                                             / sizeof(float));
     ib_ = std::make_shared<IndexBuffer>(indices_.data(), indices_.size());
     va_ = std::make_shared<VertexArray>(*vb_, layout);
 }
@@ -63,6 +75,12 @@ void Mesh::load_vertices(aiMesh* mesh)
             v.tex_coords.x = mesh->mTextureCoords[0][i].x;
             v.tex_coords.y = mesh->mTextureCoords[0][i].y;
         }
+        v.tangent.x = mesh->mTangents[i].x;
+        v.tangent.y = mesh->mTangents[i].y;
+        v.tangent.z = mesh->mTangents[i].z;
+        v.bitangent.x = mesh->mBitangents[i].x;
+        v.bitangent.y = mesh->mBitangents[i].y;
+        v.bitangent.z = mesh->mBitangents[i].z;
         vertices_.push_back(v);
     }
 }
@@ -92,6 +110,8 @@ void Mesh::load_material_textures(aiMesh* mesh, const aiScene* scene)
         textures_.reserve(tex_count);
         load_material_texture_type(mat, aiTextureType_DIFFUSE);
         load_material_texture_type(mat, aiTextureType_SPECULAR);
+        load_material_texture_type(mat, aiTextureType_NORMALS);
+        load_material_texture_type(mat, aiTextureType_HEIGHT);
     }
 }
 
@@ -102,6 +122,6 @@ void Mesh::load_material_texture_type(aiMaterial* mat, aiTextureType type)
         aiString str;
         mat->GetTexture(type, i, &str);
         std::string path = directory_ + str.C_Str();
-        textures_.push_back(Texture::get(path, type));
+        textures_.insert(Texture::get(path, type));
     }
 }
