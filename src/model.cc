@@ -39,6 +39,34 @@ void Model::draw(std::shared_ptr<Shader> shader) const
     }
 }
 
+void Model::reset()
+{
+    transform_ = glm::mat4(1);
+}
+
+Model& Model::translate(glm::vec3 v)
+{
+    transform_ = glm::translate(transform_, v);
+    return *this;
+}
+
+Model& Model::rotate_rad(float angle, glm::vec3 v)
+{
+    transform_ = glm::rotate(transform_, angle, glm::normalize(v));
+    return *this;
+}
+
+Model& Model::rotate_deg(float angle, glm::vec3 v)
+{
+    return rotate_rad(angle * AI_MATH_PI_F / 180.0f, v);
+}
+
+Model& Model::scale(glm::vec3 v)
+{
+    transform_ = glm::scale(transform_, v);
+    return *this;
+}
+
 void Model::process_node(aiNode* node, const aiScene* scene)
 {
     for (unsigned i = 0; i < node->mNumMeshes; ++i)

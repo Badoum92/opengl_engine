@@ -15,6 +15,12 @@ public:
 
     void draw(std::shared_ptr<Shader> shader) const;
 
+    void reset();
+    Model& translate(glm::vec3 v);
+    Model& rotate_rad(float angle, glm::vec3 v);
+    Model& rotate_deg(float angle, glm::vec3 v);
+    Model& scale(glm::vec3 v);
+
 private:
     std::string directory_;
     std::vector<Mesh> meshes_;
