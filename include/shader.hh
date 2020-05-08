@@ -23,15 +23,14 @@ public:
     void link();
     void bind() const;
 
-    void uniform(const char* name, const bool& val) const;
-    void uniform(const char* name, const int& val) const;
-    void uniform(const char* name, const float& val) const;
-    void uniform(const char* name, const glm::vec2& val) const;
-    void uniform(const char* name, const glm::vec3& val) const;
-    void uniform(const char* name, const glm::vec4& val) const;
-    void uniform(const char* name, const glm::mat2& val) const;
-    void uniform(const char* name, const glm::mat3& val) const;
-    void uniform(const char* name, const glm::mat4& val) const;
+    void uniform(const char* name, const int& val, int size = 1) const;
+    void uniform(const char* name, const float& val, int size = 1) const;
+    void uniform(const char* name, const glm::vec2& val, int size = 1) const;
+    void uniform(const char* name, const glm::vec3& val, int size = 1) const;
+    void uniform(const char* name, const glm::vec4& val, int size = 1) const;
+    void uniform(const char* name, const glm::mat2& val, int size = 1) const;
+    void uniform(const char* name, const glm::mat3& val, int size = 1) const;
+    void uniform(const char* name, const glm::mat4& val, int size = 1) const;
 
 private:
     int shader_;

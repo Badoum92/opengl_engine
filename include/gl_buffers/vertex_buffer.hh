@@ -3,7 +3,7 @@
 class VertexBuffer
 {
 public:
-    VertexBuffer() = default;
+    VertexBuffer();
     VertexBuffer(const float* data, unsigned count);
     ~VertexBuffer();
 

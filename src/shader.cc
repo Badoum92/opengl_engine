@@ -104,71 +104,54 @@ GLint Shader::get_location(const char* name) const
     GLint location = glGetUniformLocation(shader_, name);
     locations_[name] = location;
     if (location == -1)
-    {
         std::cerr << "Shader: uniform '" << name << "' not found\n";
-    }
     return location;
 }
 
-void Shader::uniform(const char* name, const bool& val) const
+void Shader::uniform(const char* name, const int& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform1i(location, (int)val);
+    glUniform1iv(location, size, &val);
 }
 
-void Shader::uniform(const char* name, const int& val) const
+void Shader::uniform(const char* name, const float& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform1i(location, val);
+    glUniform1fv(location, size, &val);
 }
 
-void Shader::uniform(const char* name, const float& val) const
+void Shader::uniform(const char* name, const glm::vec2& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform1f(location, val);
+    glUniform2fv(location, size, &val[0]);
 }
 
-void Shader::uniform(const char* name, const glm::vec2& val) const
+void Shader::uniform(const char* name, const glm::vec3& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform2fv(location, 1, &val[0]);
+    glUniform3fv(location, size, &val[0]);
 }
 
-void Shader::uniform(const char* name, const glm::vec3& val) const
+void Shader::uniform(const char* name, const glm::vec4& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform3fv(location, 1, &val[0]);
+    glUniform4fv(location, size, &val[0]);
 }
 
-void Shader::uniform(const char* name, const glm::vec4& val) const
+void Shader::uniform(const char* name, const glm::mat2& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniform4fv(location, 1, &val[0]);
+    glUniformMatrix2fv(location, size, GL_FALSE, &val[0][0]);
 }
 
-void Shader::uniform(const char* name, const glm::mat2& val) const
+void Shader::uniform(const char* name, const glm::mat3& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniformMatrix2fv(location, 1, GL_FALSE, &val[0][0]);
+    glUniformMatrix3fv(location, size, GL_FALSE, &val[0][0]);
 }
 
-void Shader::uniform(const char* name, const glm::mat3& val) const
+void Shader::uniform(const char* name, const glm::mat4& val, int size) const
 {
     auto location = get_location(name);
-    if (location != -1)
-        glUniformMatrix3fv(location, 1, GL_FALSE, &val[0][0]);
-}
-
-void Shader::uniform(const char* name, const glm::mat4& val) const
-{
-    auto location = get_location(name);
-    if (location != -1)
-        glUniformMatrix4fv(location, 1, GL_FALSE, &val[0][0]);
+    glUniformMatrix4fv(location, size, GL_FALSE, &val[0][0]);
 }

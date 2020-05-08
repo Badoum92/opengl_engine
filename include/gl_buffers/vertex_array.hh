@@ -6,9 +6,11 @@
 class VertexArray
 {
 public:
-    VertexArray(const VertexBuffer& vb, const VertexBufferLayout& layout,
-                unsigned location = 0);
+    VertexArray();
+    VertexArray(const VertexBuffer& vb, const VertexBufferLayout& layout);
     ~VertexArray();
+
+    void add_buffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
     void bind() const;
     void unbind() const;

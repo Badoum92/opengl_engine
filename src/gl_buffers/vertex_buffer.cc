@@ -2,11 +2,15 @@
 
 #include <glad/glad.h>
 
+VertexBuffer::VertexBuffer()
+{
+    glGenBuffers(1, &id);
+}
+
 VertexBuffer::VertexBuffer(const float* data, unsigned count)
 {
     glGenBuffers(1, &id);
-    bind();
-    glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
+    update(data, count);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -16,8 +20,6 @@ VertexBuffer::~VertexBuffer()
 
 void VertexBuffer::update(const float* data, unsigned count)
 {
-    glDeleteBuffers(1, &id);
-    glGenBuffers(1, &id);
     bind();
     glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
 }

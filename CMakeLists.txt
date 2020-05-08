@@ -9,13 +9,6 @@ set(CMAKE_CXX_COMPILER clang++)
 add_compile_options(-std=c++17 -Wall -Wextra -pedantic -g3)
 add_definitions(${GLFW_DEFINITIONS})
 
-set(IMGUI_IMPL_SRC
-    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
-    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.h
-    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
-    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.h
-)
-
 add_executable(main
     src/main.cc
     src/shader.cc
@@ -35,8 +28,6 @@ add_executable(main
     src/gl_buffers/index_buffer.cc
 
     src/imgui_windows.cc
-
-    ${IMGUI_IMPL_SRC}
 )
 
 include_directories(
@@ -48,7 +39,6 @@ include_directories(
     ${IMGUI_INCLUDE_DIR}
     ${ASSIMP_INCLUDE_DIR}
 )
-include_directories(include)
 
 target_link_libraries(main
     ${OPENGL_LIBRARIES}

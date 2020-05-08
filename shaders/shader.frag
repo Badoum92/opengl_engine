@@ -46,7 +46,7 @@ void main()
     vec3 reflect_dir = reflect(-light_dir, normal);
     vec3 halfway_dir = normalize(light_dir + view_dir);
     float spec = pow(max(dot(normal, halfway_dir), 0.0), 32.0);
-    vec3 specular = vec3(0.2) * spec;
+    vec3 specular = vec3(0.1) * spec;
 
     frag_color = vec4(ambient + diffuse + specular, 1.0);
 }

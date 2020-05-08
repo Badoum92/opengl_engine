@@ -18,6 +18,7 @@ public:
 private:
     std::string directory_;
     std::vector<Mesh> meshes_;
+    glm::mat4 transform_ = glm::mat4(1);
 
     void process_node(aiNode* node, const aiScene* scene);
 };

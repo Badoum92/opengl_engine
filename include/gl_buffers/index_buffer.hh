@@ -3,11 +3,11 @@
 class IndexBuffer
 {
 public:
-    IndexBuffer() = default;
+    IndexBuffer();
     IndexBuffer(const unsigned* data, unsigned count);
     ~IndexBuffer();
 
-    unsigned get_count() const;
+    unsigned nb_indices() const;
 
     void update(const unsigned* data, unsigned count);
 

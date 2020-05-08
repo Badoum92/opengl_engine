@@ -15,8 +15,8 @@ public:
 
     aiTextureType get_type() const;
 
-    static std::shared_ptr<Texture> get(const std::string& path,
-                                        aiTextureType type);
+    static std::shared_ptr<Texture> get_or_create(const std::string& path,
+                                                  aiTextureType type);
     static void active(unsigned i);
 
 private:

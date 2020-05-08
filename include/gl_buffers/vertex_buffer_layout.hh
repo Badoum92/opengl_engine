@@ -5,15 +5,17 @@
 
 struct VertexBufferElement
 {
-    VertexBufferElement(GLint c, GLenum t, GLboolean n)
+    VertexBufferElement(GLint c, GLenum t, GLboolean n, GLsizei o)
         : count(c)
         , type(t)
         , normalized(n)
+        , offset(o)
     {}
 
     GLint count;
     GLenum type;
     GLboolean normalized;
+    GLsizei offset;
 };
 
 class VertexBufferLayout
@@ -21,8 +23,9 @@ class VertexBufferLayout
 public:
     VertexBufferLayout() = default;
 
-    const std::vector<VertexBufferElement>& get_elements() const;
+    size_t nb_elements() const;
     GLsizei get_stride() const;
+    const VertexBufferElement& operator[](unsigned i) const;
 
     template <typename T>
     void push(GLint count);

@@ -52,8 +52,8 @@ aiTextureType Texture::get_type() const
     return type_;
 }
 
-std::shared_ptr<Texture> Texture::get(const std::string& path,
-                                      aiTextureType type)
+std::shared_ptr<Texture> Texture::get_or_create(const std::string& path,
+                                                aiTextureType type)
 {
     auto it = textures_.find(path);
     if (it != textures_.end() && it->second->type_ == type)

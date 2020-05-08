@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 void process_input(GLFWwindow* window);

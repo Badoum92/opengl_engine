@@ -27,14 +27,14 @@ void mouse_callback(GLFWwindow*, double x_pos, double y_pos)
     static float last_x = x_pos;
     static float last_y = y_pos;
 
-    if (Window::cursor_enabled())
-        return;
-
     float x_offset = x_pos - last_x;
     float y_offset = last_y - y_pos;
 
     last_x = x_pos;
     last_y = y_pos;
+
+    if (Window::cursor_enabled())
+        return;
 
     Camera::process_mouse_movement(x_offset, y_offset);
 }

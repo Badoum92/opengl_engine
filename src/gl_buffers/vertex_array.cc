@@ -1,19 +1,28 @@
 #include "gl_buffers/vertex_array.hh"
 
-VertexArray::VertexArray(const VertexBuffer& vb,
-                         const VertexBufferLayout& layout, unsigned location)
+VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &id);
+}
+
+VertexArray::VertexArray(const VertexBuffer& vb,
+                         const VertexBufferLayout& layout)
+{
+    glGenVertexArrays(1, &id);
+    add_buffer(vb, layout);
+}
+
+void VertexArray::add_buffer(const VertexBuffer& vb,
+                             const VertexBufferLayout& layout)
+{
     vb.bind();
     bind();
-    unsigned offset = 0;
-    for (unsigned i = 0; i < layout.get_elements().size(); ++i)
+    for (unsigned i = 0; i < layout.nb_elements(); ++i)
     {
-        const auto& elt = layout.get_elements()[i];
-        glVertexAttribPointer(location, elt.count, elt.type, elt.normalized,
-                              layout.get_stride(), (void*)offset);
-        glEnableVertexAttribArray(location++);
-        offset += elt.count * sizeof(elt.type);
+        const auto& elt = layout[i];
+        glVertexAttribPointer(i, elt.count, elt.type, elt.normalized,
+                              layout.get_stride(), (void*)elt.offset);
+        glEnableVertexAttribArray(i);
     }
 }
 

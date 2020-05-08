@@ -46,6 +46,7 @@ int main(int argc, char** argv)
         std::cerr << "Expected model path\n";
         return 1;
     }
+
     Model model{argv[1]};
 
     while (!glfwWindowShouldClose(window))
@@ -56,6 +57,10 @@ int main(int argc, char** argv)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        shader->bind();
+        shader->uniform("u_view", Camera::get_view_matrix());
+        shader->uniform("u_projection", Camera::get_proj_matrix());
+        shader->uniform("u_light_pos", ImGuiWindows::light_pos);
         model.draw(shader);
 
         ImGuiWindows::render();

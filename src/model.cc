@@ -25,16 +25,13 @@ Model::Model(const std::string& path)
     directory_ = path.substr(0, path.find_last_of('/') + 1);
     if (directory_.empty())
         directory_ = "./";
+    meshes_.reserve(scene->mNumMeshes);
     process_node(scene->mRootNode, scene);
 }
 
 void Model::draw(std::shared_ptr<Shader> shader) const
 {
-    shader->bind();
-    shader->uniform("u_model", glm::mat4(1));
-    shader->uniform("u_view", Camera::get_view_matrix());
-    shader->uniform("u_projection", Camera::get_proj_matrix());
-    shader->uniform("u_light_pos", ImGuiWindows::light_pos);
+    shader->uniform("u_model", transform_);
 
     for (const auto& mesh : meshes_)
     {
@@ -44,7 +41,6 @@ void Model::draw(std::shared_ptr<Shader> shader) const
 
 void Model::process_node(aiNode* node, const aiScene* scene)
 {
-    meshes_.reserve(node->mNumMeshes);
     for (unsigned i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
