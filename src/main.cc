@@ -26,8 +26,7 @@ void program_init(GLFWwindow* window)
 
 int main(int argc, char** argv)
 {
-    Window::instance();
-    GLFWwindow* window = Window::glfw_window();
+    GLFWwindow* window = Window::instance()->glfw_window();
     if (window == nullptr)
     {
         std::cerr << "Could not create window\n";

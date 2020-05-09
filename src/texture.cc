@@ -3,26 +3,42 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#include "window.hh"
 #include "stb_image.hh"
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> Texture::textures_;
 
+Texture::Texture()
+{
+    type_ = aiTextureType_NONE;
+    glGenTextures(1, &id_);
+    create_empty();
+}
+
 Texture::Texture(const std::string& path, aiTextureType type)
-    : type_(type)
-    , id_(from_file(path))
-    , path_(path)
-{}
+{
+    type_ = type;
+    glGenTextures(1, &id_);
+    from_file(path);
+}
 
 Texture::~Texture()
 {
     glDeleteTextures(1, &id_);
 }
 
-unsigned Texture::from_file(const std::string& path)
+void Texture::create_empty()
 {
-    unsigned id = 0;
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
+    bind();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, NULL);
+}
+
+void Texture::from_file(const std::string& path)
+{
+    bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -37,14 +53,23 @@ unsigned Texture::from_file(const std::string& path)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0,
                  nb_chans == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    unbind();
     stbi_image_free(data);
-    return id;
 }
 
 void Texture::bind() const
 {
     glBindTexture(GL_TEXTURE_2D, id_);
+}
+
+void Texture::unbind() const
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+unsigned Texture::get_id() const
+{
+    return id_;
 }
 
 aiTextureType Texture::get_type() const
