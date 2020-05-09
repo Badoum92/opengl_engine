@@ -36,9 +36,9 @@ void Mesh::draw(std::shared_ptr<Shader> shader) const
     }
     Texture::active(0);
 
-    va_.bind();
-    ib_.bind();
-    glDrawElements(GL_TRIANGLES, ib_.nb_indices(), GL_UNSIGNED_INT, 0);
+    va_->bind();
+    ib_->bind();
+    glDrawElements(GL_TRIANGLES, ib_->nb_indices(), GL_UNSIGNED_INT, 0);
 }
 
 void Mesh::setup_buffers()
@@ -49,10 +49,10 @@ void Mesh::setup_buffers()
     layout.push<float>(2); // tex_coords
     layout.push<float>(3); // tangent
     layout.push<float>(3); // bitangent
-    vb_.update((float*)vertices_.data(),
-               vertices_.size() * sizeof(Vertex) / sizeof(float));
-    ib_.update(indices_.data(), indices_.size());
-    va_.add_buffer(vb_, layout);
+    vb_ = VertexBuffer::create((float*)vertices_.data(),
+                               vertices_.size() * sizeof(Vertex));
+    ib_ = IndexBuffer::create(indices_.data(), indices_.size());
+    va_ = VertexArray::create(*vb_, layout);
 }
 
 void Mesh::load_vertices(aiMesh* mesh)

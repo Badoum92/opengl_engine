@@ -4,11 +4,12 @@
 #include <unordered_map>
 #include <memory>
 #include <assimp/scene.h>
+#include <glad/glad.h>
 
 class Texture
 {
 public:
-    Texture();
+    Texture(unsigned width, unsigned height);
     Texture(const std::string& path, aiTextureType type);
     ~Texture();
 
@@ -26,7 +27,8 @@ private:
     aiTextureType type_;
     unsigned id_;
 
-    void create_empty();
+    void create_empty(unsigned width, unsigned height,
+                      int type = GL_UNSIGNED_BYTE);
     void from_file(const std::string& path);
 
     static std::unordered_map<std::string, std::shared_ptr<Texture>> textures_;

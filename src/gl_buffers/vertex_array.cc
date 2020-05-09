@@ -40,3 +40,9 @@ void VertexArray::unbind() const
 {
     glBindVertexArray(0);
 }
+
+std::shared_ptr<VertexArray>
+VertexArray::create(const VertexBuffer& vb, const VertexBufferLayout& layout)
+{
+    return std::make_shared<VertexArray>(vb, layout);
+}

@@ -39,9 +39,10 @@ void CubeMap::draw(std::shared_ptr<Shader> shader) const
     shader->bind();
     shader->uniform("u_view", glm::mat4(glm::mat3(Camera::get_view_matrix())));
     shader->uniform("u_projection", Camera::get_proj_matrix());
-    va_.bind();
+    va_->bind();
+    ib_->bind();
     bind();
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawElements(GL_TRIANGLES, ib_->nb_indices(), GL_UNSIGNED_INT, 0);
     glDepthFunc(GL_LESS);
 }
 
@@ -87,52 +88,29 @@ void CubeMap::setup_buffers()
 {
     // clang-format off
     float vertices[] = {
-        -0.5f,  0.5f, -0.5f,
         -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,
          0.5f,  0.5f, -0.5f,
         -0.5f,  0.5f, -0.5f,
-
         -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-
-         0.5f, -0.5f, -0.5f,
          0.5f, -0.5f,  0.5f,
          0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
+        -0.5f,  0.5f,  0.5f
+    };
 
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f
+    unsigned indices[] = {
+        0, 1, 3, 3, 1, 2,
+        1, 5, 2, 2, 5, 6,
+        5, 4, 6, 6, 4, 7,
+        4, 0, 7, 7, 0, 3,
+        3, 2, 7, 7, 2, 6,
+        4, 5, 0, 0, 5, 1
     };
     // clang-format on
 
     VertexBufferLayout layout;
     layout.push<float>(3); // position
-    vb_.update(vertices, sizeof(vertices));
-    va_.add_buffer(vb_, layout);
+    vb_ = VertexBuffer::create(vertices, sizeof(vertices) * sizeof(float));
+    ib_ = IndexBuffer::create(indices, sizeof(indices));
+    va_ = VertexArray::create(*vb_, layout);
 }

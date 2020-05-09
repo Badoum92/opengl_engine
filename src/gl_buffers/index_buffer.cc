@@ -10,7 +10,7 @@ IndexBuffer::IndexBuffer()
 IndexBuffer::IndexBuffer(const unsigned* data, unsigned count)
 {
     glGenBuffers(1, &id);
-    update(data, count);
+    update(data, count, GL_STATIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()
@@ -23,11 +23,10 @@ unsigned IndexBuffer::nb_indices() const
     return count_;
 }
 
-void IndexBuffer::update(const unsigned* data, unsigned count)
+void IndexBuffer::update(const unsigned* data, unsigned count, int type)
 {
     bind();
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned), data,
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned), data, type);
     count_ = count;
 }
 
@@ -39,4 +38,10 @@ void IndexBuffer::bind() const
 void IndexBuffer::unbind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+std::shared_ptr<IndexBuffer> IndexBuffer::create(const unsigned* data,
+                                                 unsigned count)
+{
+    return std::make_shared<IndexBuffer>(data, count);
 }

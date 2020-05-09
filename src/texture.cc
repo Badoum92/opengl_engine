@@ -1,6 +1,5 @@
 #include "texture.hh"
 
-#include <glad/glad.h>
 #include <iostream>
 
 #include "window.hh"
@@ -8,11 +7,11 @@
 
 std::unordered_map<std::string, std::shared_ptr<Texture>> Texture::textures_;
 
-Texture::Texture()
+Texture::Texture(unsigned width, unsigned height)
 {
     type_ = aiTextureType_NONE;
     glGenTextures(1, &id_);
-    create_empty();
+    create_empty(width, height);
 }
 
 Texture::Texture(const std::string& path, aiTextureType type)
@@ -27,13 +26,14 @@ Texture::~Texture()
     glDeleteTextures(1, &id_);
 }
 
-void Texture::create_empty()
+void Texture::create_empty(unsigned width, unsigned height, int type)
 {
     bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, type,
+                 NULL);
+    unbind();
 }
 
 void Texture::from_file(const std::string& path)

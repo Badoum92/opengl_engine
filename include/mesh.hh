@@ -37,9 +37,9 @@ private:
     std::vector<unsigned> indices_;
     std::unordered_set<std::shared_ptr<Texture>> textures_;
 
-    VertexArray va_;
-    VertexBuffer vb_;
-    IndexBuffer ib_;
+    std::shared_ptr<VertexArray> va_;
+    std::shared_ptr<VertexBuffer> vb_;
+    std::shared_ptr<IndexBuffer> ib_;
 
     void setup_buffers();
     void load_vertices(aiMesh* mesh);

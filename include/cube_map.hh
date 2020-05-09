@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "gl_buffers/vertex_buffer.hh"
+#include "gl_buffers/index_buffer.hh"
 #include "gl_buffers/vertex_buffer_layout.hh"
 #include "gl_buffers/vertex_array.hh"
 #include "shader.hh"
@@ -20,8 +21,9 @@ public:
 
 private:
     unsigned id_;
-    VertexBuffer vb_;
-    VertexArray va_;
+    std::shared_ptr<VertexArray> va_;
+    std::shared_ptr<VertexBuffer> vb_;
+    std::shared_ptr<IndexBuffer> ib_;
 
     void load_cubemap(const std::string files[]);
     void setup_buffers();
