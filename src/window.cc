@@ -49,8 +49,10 @@ GLFWwindow* create_window()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glFrontFace(GL_CW);
-    glCullFace(GL_CCW);
+
+    // glEnable(GL_CULL_FACE);
+    // glCullFace(GL_BACK);
+    // glFrontFace(GL_CCW);
 
     return window;
 }

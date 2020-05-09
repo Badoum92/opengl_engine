@@ -21,11 +21,13 @@ add_executable(main
     src/texture.cc
     src/mesh.cc
     src/model.cc
+    src/cube_map.cc
 
     src/gl_buffers/vertex_buffer.cc
     src/gl_buffers/vertex_buffer_layout.cc
     src/gl_buffers/vertex_array.cc
     src/gl_buffers/index_buffer.cc
+    src/gl_buffers/frame_buffer.cc
 
     src/imgui_windows.cc
 )

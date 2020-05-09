@@ -17,6 +17,7 @@
 #include "imgui_windows.hh"
 
 #include "model.hh"
+#include "cube_map.hh"
 
 void program_init(GLFWwindow* window)
 {
@@ -40,6 +41,11 @@ int main(int argc, char** argv)
         .add("../shaders/shader.frag", Shader::Type::FRAGMENT)
         .link();
 
+    auto cubemap_shader = std::make_shared<Shader>();
+    cubemap_shader->add("../shaders/cubemap.vert", Shader::Type::VERTEX)
+        .add("../shaders/cubemap.frag", Shader::Type::FRAGMENT)
+        .link();
+
     if (argc < 2)
     {
         std::cerr << "Expected model path\n";
@@ -47,6 +53,8 @@ int main(int argc, char** argv)
     }
 
     Model model{argv[1]};
+
+    CubeMap cubemap("../../skybox");
 
     while (!glfwWindowShouldClose(window))
     {
@@ -61,6 +69,8 @@ int main(int argc, char** argv)
         shader->uniform("u_projection", Camera::get_proj_matrix());
         shader->uniform("u_light_pos", ImGuiWindows::light_pos);
         model.draw(shader);
+
+        cubemap.draw(cubemap_shader);
 
         ImGuiWindows::render();
 

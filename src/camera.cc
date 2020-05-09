@@ -34,7 +34,7 @@ void Camera::init(const glm::vec3& position, glm::vec3 up, float yaw,
     update_vectors();
 
     float near = 0.1f;
-    float far = 3000.0f;
+    float far = 30000.0f;
     projection_ = glm::perspective(glm::radians(zoom_),
                                    (float)WIDTH / (float)HEIGHT, near, far);
 }
